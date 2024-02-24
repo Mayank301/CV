@@ -1,0 +1,482 @@
+[1:44 PM] Srivastava, Aman (Cognizant)
+package com.spring.main;
+
+import java.util.Scanner;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.spring.config.ApplicationConfig;
+
+import com.spring.service.ShipmentService;
+ 
+ 
+public class Driver {
+ 
+public static void main(String[] args) {
+
+AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+
+   Scanner sc= new Scanner(System.in);
+
+  System.out.println("Enter the Item Id:");
+
+String itemId=sc.nextLine();
+ 
+System.out.println("Enter the Item Type:");
+
+String itemType=sc.nextLine();
+ 
+System.out.println("Enter the Price:");
+
+double price=Double.parseDouble(sc.nextLine());
+ 
+System.out.println("Enter the Shipment Details");
+
+System.out.println("Enter the Shipment Id:");
+ 
+String shipId=sc.nextLine();
+
+System.out.print("Enter the Shipment Date:");
+
+String shipDate=sc.nextLine();
+ 
+System.out.print("Enter the Shipment Address:");
+
+String shipAddress=sc.nextLine();
+ 
+System.out.print("Enter the Coupon Code:");
+
+String couponCode=sc.nextLine();
+
+ShipmentService service= context.getBean(ShipmentService.class);
+
+double amount =service.processDiscount(shipId,shipDate,itemId,itemType,price,shipAddress,couponCode);
+
+System.out.print("Discount Amount:" +amount);
+ 
+}
+
+}
+ 
+ 
+//package com.spring.main;
+
+//
+
+//import java.util.Scanner;
+
+//
+
+//import org.springframework.context.ApplicationContext;
+
+//import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+//
+
+//import com.spring.config.ApplicationConfig;
+
+//import com.spring.exception.InvalidCouponCodeException;
+
+//import com.spring.service.ShipmentService;
+
+//
+
+//public class Driver {
+
+//    public static void main(String[] args) {
+
+//        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+
+//        ShipmentService shipmentService = context.getBean(ShipmentService.class);
+
+//
+
+//        Scanner scanner = new Scanner(System.in);
+
+//        System.out.println("Enter the Item Id:");
+
+//        String itemId = scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Item Type:");
+
+//        String itemType = scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Price:");
+
+//        double price = scanner.nextDouble();
+
+//
+
+//        System.out.println("Enter the Shipment Details");
+
+//        scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Shipment Id:");
+
+//        String shipmentId = scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Shipment Date:");
+
+//        String shipmentDate = scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Shipment Address:");
+
+//        String address = scanner.nextLine();
+
+//
+
+//        System.out.println("Enter the Coupon code:");
+
+//        String couponCode = scanner.nextLine();
+
+//
+
+//        try {
+
+//            double discountedAmount = shipmentService.processDiscount(shipmentId, shipmentDate, itemId, itemType,
+
+//                    price, address, couponCode);
+
+//            System.out.println("Discounted Amount: " + discountedAmount);
+
+//        } catch (InvalidCouponCodeException e) {
+
+//            System.out.println(e.getMessage());
+
+//        }
+
+//    }
+
+//}
+[1:44 PM] Srivastava, Aman (Cognizant)
+Driver.java
+[1:45 PM] Srivastava, Aman (Cognizant)
+package com.spring.model;
+ 
+import java.util.Map;
+ 
+import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.context.annotation.PropertySource;
+
+import org.springframework.stereotype.Component;
+ 
+//pojo class with required attributes,getters and setters 
+
+//use appropriate annotation to make this class as component class
+
+@Component
+
+@PropertySource("classpath:/couponCode.properties")
+
+public class CouponUtility {
+
+	@Value(value="#{${couponCodes.map}}")
+
+	private  Map<String,Integer> couponCodes;
+
+	public  Map<String, Integer> getCouponCodes() {
+
+		return couponCodes;
+
+	}
+
+	public  void setCouponCodes(Map<String, Integer> couponCodes) {
+
+		this.couponCodes = couponCodes;
+
+	}	
+
+}
+
+[1:45 PM] Srivastava, Aman (Cognizant)
+CouponUtility.java
+[1:45 PM] Srivastava, Aman (Cognizant)
+package com.spring.model;
+ 
+import org.springframework.stereotype.Component;
+ 
+//pojo class with required attributes,getters and setters 
+
+//use appropriate annotation to make this class as component class
+
+@Component
+
+public class Item {
+
+	private String itemId;
+
+	private String itemType;
+
+	private double price;
+
+	public Item() {
+
+		// TODO Auto-generated constructor stub
+
+	}
+
+	public Item(String itemId, String itemType, double price) {
+
+		super();
+
+		this.itemId = itemId;
+
+		this.itemType = itemType;
+
+		this.price = price;
+
+	}
+
+	public String getItemId() {
+
+		return itemId;
+
+	}
+
+	public void setItemId(String itemId) {
+
+		this.itemId = itemId;
+
+	}
+
+	public String getItemType() {
+
+		return itemType;
+
+	}
+
+	public void setItemType(String itemType) {
+
+		this.itemType = itemType;
+
+	}
+
+	public double getPrice() {
+
+		return price;
+
+	}
+
+	public void setPrice(double price) {
+
+		this.price = price;
+
+	}
+
+
+}
+
+[1:45 PM] Srivastava, Aman (Cognizant)
+item.java
+[1:46 PM] Srivastava, Aman (Cognizant)
+package com.spring.model;
+ 
+import org.springframework.stereotype.Component;
+ 
+//pojo class with required attributes,getters and setters 
+
+//use appropriate annotation to make this class as component class
+
+@Component
+
+public class Shipment {
+ 
+	private String shipmentId;
+
+	private String shipmentDate; 	
+
+	private Item item;
+
+	private String deliveryAddress;
+
+	private String couponCode;
+
+	public Shipment() {
+
+		// TODO Auto-generated constructor stub
+
+	}
+
+
+	public Shipment(String shipmentId, String shipmentDate, Item item, String deliveryAddress, String couponCode) {
+
+		super();
+
+		this.shipmentId = shipmentId;
+
+		this.shipmentDate = shipmentDate;
+
+		this.item = item;
+
+		this.deliveryAddress = deliveryAddress;
+
+		this.couponCode = couponCode;
+
+	}
+ 
+ 
+	public String getCouponCode() {
+
+		return couponCode;
+
+	}
+ 
+	public void setCouponCode(String couponCode) {
+
+		this.couponCode = couponCode;
+
+	}
+ 
+	public String getDeliveryAddress() {
+
+		return deliveryAddress;
+
+	}
+ 
+	public void setDeliveryAddress(String deliveryAddress) {
+
+		this.deliveryAddress = deliveryAddress;
+
+	}
+ 
+// fill the code
+
+	public Shipment(Item item) {
+
+		super();
+
+		this.item = item;
+
+	}
+ 
+	public String getShipmentId() {
+
+		return shipmentId;
+
+	}
+ 
+	public void setShipmentId(String shipmentId) {
+
+		this.shipmentId = shipmentId;
+
+	}
+ 
+	public String getShipmentDate() {
+
+		return shipmentDate;
+
+	}
+ 
+	public void setShipmentDate(String shipmentDate) {
+
+		this.shipmentDate = shipmentDate;
+
+	}
+ 
+	public Item getItem() {
+
+		return item;
+
+	}
+ 
+	public void setItem(Item item) {
+
+		this.item = item;
+
+	}
+
+
+}
+ 
+[1:46 PM] Srivastava, Aman (Cognizant)
+shipment.java
+[1:47 PM] Srivastava, Aman (Cognizant)
+package com.spring.service;
+ 
+import com.spring.bo.ShipmentBO;
+
+import org.springframework.stereotype.Component;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.spring.exception.InvalidCouponCodeException;
+
+import com.spring.model.Item;
+
+import com.spring.model.Shipment;
+
+//use appropriate annotation to make this class as component class
+
+@Component
+
+public class ShipmentService {
+
+	private ShipmentBO shipmentBOObj;
+ 
+	//fill the code
+
+	 @Autowired
+
+	public ShipmentService(ShipmentBO shipmentBOObj) {
+
+		super();
+
+		this.shipmentBOObj = shipmentBOObj;
+
+	}
+ 
+	
+
+	public ShipmentBO getShipmentBOObj() {
+
+		return shipmentBOObj;
+
+	}
+ 
+ 
+	public void setShipmentBOObj(ShipmentBO shipmentBOObj) {
+
+		this.shipmentBOObj = shipmentBOObj;
+
+	}
+ 
+ 
+public double processDiscount(String shipmentId, String shipmentDate, String itemId, String itemType, double price,
+
+            String address, String couponCode){
+
+	        double amount=0;
+
+            Item item = new Item(itemId, itemType, price);
+
+             Shipment shipment = new Shipment(shipmentId, shipmentDate, item, address, couponCode);
+
+             try{
+
+	          amount = shipmentBOObj.processDiscount(shipment);
+
+             } catch (InvalidCouponCodeException e){
+
+               System.out.println(e.getMessage());
+
+           }
+
+	    	return amount;
+
+}
+
+}
+
+[1:47 PM] Srivastava, Aman (Cognizant)
+ShipmentService.java
