@@ -1,0 +1,91 @@
+package com.spring.main;
+import java.util.Scanner;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.spring.config.ApplicationConfig;
+import com.spring.service.ShipmentService;
+ 
+ 
+public class Driver {
+ 
+public static void main(String[] args) {
+AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+   Scanner sc= new Scanner(System.in);
+  System.out.println("Enter the Item Id:");
+String itemId=sc.nextLine();
+ 
+System.out.println("Enter the Item Type:");
+String itemType=sc.nextLine();
+ 
+System.out.println("Enter the Price:");
+double price=Double.parseDouble(sc.nextLine());
+ 
+System.out.println("Enter the Shipment Details");
+System.out.println("Enter the Shipment Id:");
+ 
+String shipId=sc.nextLine();
+System.out.print("Enter the Shipment Date:");
+String shipDate=sc.nextLine();
+ 
+System.out.print("Enter the Shipment Address:");
+String shipAddress=sc.nextLine();
+ 
+System.out.print("Enter the Coupon Code:");
+String couponCode=sc.nextLine();
+ShipmentService service= context.getBean(ShipmentService.class);
+double amount =service.processDiscount(shipId,shipDate,itemId,itemType,price,shipAddress,couponCode);
+System.out.print("Discount Amount:" +amount);
+ 
+}
+}
+ 
+ 
+//package com.spring.main;
+//
+//import java.util.Scanner;
+//
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+//
+//import com.spring.config.ApplicationConfig;
+//import com.spring.exception.InvalidCouponCodeException;
+//import com.spring.service.ShipmentService;
+//
+//public class Driver {
+//    public static void main(String[] args) {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+//        ShipmentService shipmentService = context.getBean(ShipmentService.class);
+//
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Enter the Item Id:");
+//        String itemId = scanner.nextLine();
+//
+//        System.out.println("Enter the Item Type:");
+//        String itemType = scanner.nextLine();
+//
+//        System.out.println("Enter the Price:");
+//        double price = scanner.nextDouble();
+//
+//        System.out.println("Enter the Shipment Details");
+//        scanner.nextLine();
+//
+//        System.out.println("Enter the Shipment Id:");
+//        String shipmentId = scanner.nextLine();
+//
+//        System.out.println("Enter the Shipment Date:");
+//        String shipmentDate = scanner.nextLine();
+//
+//        System.out.println("Enter the Shipment Address:");
+//        String address = scanner.nextLine();
+//
+//        System.out.println("Enter the Coupon code:");
+//        String couponCode = scanner.nextLine();
+//
+//        try {
+//            double discountedAmount = shipmentService.processDiscount(shipmentId, shipmentDate, itemId, itemType,
+//                    price, address, couponCode);
+//            System.out.println("Discounted Amount: " + discountedAmount);
+//        } catch (InvalidCouponCodeException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//}

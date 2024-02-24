@@ -1,0 +1,33 @@
+package com.spring.bo;
+ 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+ 
+import com.spring.exception.InvalidCouponCodeException;
+import com.spring.model.CouponUtility;
+import com.spring.model.Shipment;
+//use appropriate annotation to make this class as component class
+@Component
+public class ShipmentBO {
+	private CouponUtility couponUtility;
+
+	@Autowired
+    public ShipmentBO(CouponUtility couponUtility) {
+		super();
+		this.couponUtility = couponUtility;
+	}
+ 
+    public double processDiscount(Shipment shipmentObj) throws InvalidCouponCodeException {
+        double price = shipmentObj.getItem().getPrice();
+        String couponCode = shipmentObj.getCouponCode();
+        double amount = 0;
+        if (couponUtility.getCouponCodes().containsKey(couponCode)) {
+            int discountPercentage = couponUtility.getCouponCodes().get(couponCode);
+            amount = price - (price * discountPercentage) / 100.0;
+        } else {
+            throw new InvalidCouponCodeException("Invalid Coupon Code");
+        }
+        return amount;
+    }
+ 
+}

@@ -1,0 +1,44 @@
+package com.spring.service;
+ 
+import com.spring.bo.ShipmentBO;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.spring.exception.InvalidCouponCodeException;
+import com.spring.model.Item;
+import com.spring.model.Shipment;
+//use appropriate annotation to make this class as component class
+@Component
+public class ShipmentService {
+	private ShipmentBO shipmentBOObj;
+ 
+	//fill the code
+	 @Autowired
+	public ShipmentService(ShipmentBO shipmentBOObj) {
+		super();
+		this.shipmentBOObj = shipmentBOObj;
+	}
+ 
+	
+	public ShipmentBO getShipmentBOObj() {
+		return shipmentBOObj;
+	}
+ 
+ 
+	public void setShipmentBOObj(ShipmentBO shipmentBOObj) {
+		this.shipmentBOObj = shipmentBOObj;
+	}
+ 
+ 
+public double processDiscount(String shipmentId, String shipmentDate, String itemId, String itemType, double price,
+            String address, String couponCode){
+	        double amount=0;
+            Item item = new Item(itemId, itemType, price);
+             Shipment shipment = new Shipment(shipmentId, shipmentDate, item, address, couponCode);
+             try{
+	          amount = shipmentBOObj.processDiscount(shipment);
+             } catch (InvalidCouponCodeException e){
+               System.out.println(e.getMessage());
+           }
+	    	return amount;
+}
+}
